@@ -162,6 +162,7 @@
     // ---------------------------
     // Helpers
     // ---------------------------
+    const apiBase = "https://shift-organizer.onrender.com";
     const $ = (sel) => document.querySelector(sel);
     const api = {
       save: (formData) => fetch("/api/availability", { method: "POST", body: formData }),
