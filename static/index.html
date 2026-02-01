@@ -14,8 +14,11 @@
     }
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      margin: 24px;
+      margin: 0;
+      padding: 24px;
       color: #222;
+      background: var(--bg);
+      min-height: 100vh;
     }
     h1 { margin: 0 0 12px; }
     .card {
@@ -33,20 +36,34 @@
       border: 1px solid var(--border);
       border-radius: 8px;
       min-width: 220px;
+      font-size: 16px;
     }
     button {
-      padding: 8px 12px;
+      padding: 12px 24px;
       border-radius: 8px;
       border: 1px solid #333;
       background: #111;
       color: white;
       cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: #333;
+      transform: translateY(-1px);
     }
     button.secondary {
       background: white; color: #111; border-color: var(--border);
     }
+    button.secondary:hover {
+      background: var(--bg);
+    }
     button.danger {
       background: #d92b2b; border-color: #d92b2b; color: #fff;
+    }
+    button.danger:hover {
+      background: #b02020;
     }
     .msg { margin-top: 8px; font-weight: 600; }
     .msg.ok { color: var(--ok); }
@@ -79,82 +96,173 @@
       background: white;
     }
     .empty { color: var(--muted); font-style: italic; }
+
+    /* Landing Page Styles */
+    .view {
+      display: none;
+    }
+    .view.active {
+      display: block;
+    }
+    .landing-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      text-align: center;
+    }
+    .landing-title {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      line-height: 1.2;
+    }
+    .name-input-container {
+      margin: 24px 0;
+    }
+    .name-input {
+      font-size: 48px !important;
+      font-weight: 700 !important;
+      border: none !important;
+      border-bottom: 2px solid #222 !important;
+      border-top: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      padding: 0 !important;
+      margin: 0 8px;
+      min-width: 200px;
+      text-align: center;
+      color: #222 !important;
+      outline: none !important;
+      box-shadow: none !important;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      vertical-align: baseline;
+      line-height: 1.2 !important;
+      display: inline;
+    }
+    .name-input::placeholder {
+      color: var(--muted);
+      opacity: 0.6;
+    }
+    .name-input:focus {
+      border-bottom-color: #111 !important;
+      border-bottom-width: 3px !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+      width: 100%;
+      max-width: 400px;
+    }
+    .action-buttons button {
+      width: 100%;
+      padding: 16px 24px;
+      font-size: 18px;
+    }
+    .back-button {
+      margin-bottom: 16px;
+    }
   </style>
 </head>
 <body>
-  <h1>Shift Organizer</h1>
-
-  <!-- User + Actions -->
-  <div class="card">
-    <div class="row">
-      <label class="inline">
-        <strong>User ID</strong>
-        <input type="text" id="user_id" placeholder="e.g. alice123" />
-      </label>
-      <button id="btn_save">Save Availability</button>
-      <button id="btn_show" class="secondary">Show My Availability</button>
+  <!-- Landing Page View -->
+  <div id="landing-view" class="view active">
+    <div class="landing-page">
+      <div class="action-buttons">
+        <button id="btn-check-schedule">Check my schedule</button>
+        <button id="btn-update-availability" class="secondary">Update my availability</button>
+      </div>
     </div>
-    <div id="confirmation" class="msg"></div>
   </div>
 
-  <!-- Availability Grid -->
-  <div class="card">
-    <h3 style="margin:0;">Select Your Availability</h3>
-    <table id="availability-table" aria-label="availability grid">
-      <tr>
-        <th>Shift</th>
-        <th>Sunday</th>
-        <th>Monday</th>
-        <th>Tuesday</th>
-        <th>Wednesday</th>
-        <th>Thursday</th>
-        <th>Friday</th>
-        <th>Saturday</th>
-      </tr>
-
-      <!-- Morning -->
-      <tr>
-        <th>Morning</th>
-        <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Sunday" data-slot="Morning" /></label></td>
-        <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Monday" data-slot="Morning" /></label></td>
-        <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Tuesday" data-slot="Morning" /></label></td>
-        <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Wednesday" data-slot="Morning" /></label></td>
-        <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Thursday" data-slot="Morning" /></label></td>
-        <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Friday" data-slot="Morning" /></label></td>
-        <td><label><span class="shift-hours">10–20</span><input type="checkbox" data-day="Saturday" data-slot="Morning" /></label></td>
-      </tr>
-
-      <!-- Evening -->
-      <tr>
-        <th>Evening</th>
-        <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Sunday" data-slot="Evening" /></label></td>
-        <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Monday" data-slot="Evening" /></label></td>
-        <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Tuesday" data-slot="Evening" /></label></td>
-        <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Wednesday" data-slot="Evening" /></label></td>
-        <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Thursday" data-slot="Evening" /></label></td>
-        <td><label><span class="shift-hours">15–00</span><input type="checkbox" data-day="Friday" data-slot="Evening" /></label></td>
-        <td><!-- Saturday Evening excluded --></td>
-      </tr>
-
-      <!-- Night -->
-      <tr>
-        <th>Night</th>
-        <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Sunday" data-slot="Night" /></label></td>
-        <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Monday" data-slot="Night" /></label></td>
-        <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Tuesday" data-slot="Night" /></label></td>
-        <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Wednesday" data-slot="Night" /></label></td>
-        <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Thursday" data-slot="Night" /></label></td>
-        <td><label><span class="shift-hours">00–10</span><input type="checkbox" data-day="Friday" data-slot="Night" /></label></td>
-        <td><label><span class="shift-hours">20–07</span><input type="checkbox" data-day="Saturday" data-slot="Night" /></label></td>
-      </tr>
-    </table>
+  <!-- Check Schedule View -->
+  <div id="schedule-view" class="view">
+    <button id="btn-back-schedule" class="back-button secondary">← Back</button>
+    <div class="card">
+      <h1>My Schedule</h1>
+      <div id="schedule-list" class="list">
+        <div class="empty">Loading your schedule...</div>
+      </div>
+    </div>
+    <div id="schedule-msg" class="msg"></div>
   </div>
 
-  <!-- My Availability List -->
-  <div class="card">
-    <h3 style="margin:0;">My Availability</h3>
-    <div id="list" class="list">
-      <div class="empty">Click “Show My Availability” to load your shifts.</div>
+  <!-- Update Availability View -->
+  <div id="availability-view" class="view">
+    <button id="btn-back-availability" class="back-button secondary">← Back</button>
+    
+    <div class="card">
+      <h1>Update My Availability</h1>
+      <div class="row">
+        <label class="inline">
+          <strong>User ID</strong>
+          <input type="text" id="user_id" placeholder="e.g. alice123" />
+        </label>
+        <button id="btn_save">Save Availability</button>
+      </div>
+      <div id="confirmation" class="msg"></div>
+    </div>
+
+    <!-- Availability Grid -->
+    <div class="card">
+      <h3 style="margin:0;">Select Your Availability</h3>
+      <table id="availability-table" aria-label="availability grid">
+        <tr>
+          <th>Shift</th>
+          <th>Sunday</th>
+          <th>Monday</th>
+          <th>Tuesday</th>
+          <th>Wednesday</th>
+          <th>Thursday</th>
+          <th>Friday</th>
+          <th>Saturday</th>
+        </tr>
+
+        <!-- Morning -->
+        <tr>
+          <th>Morning</th>
+          <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Sunday" data-slot="Morning" /></label></td>
+          <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Monday" data-slot="Morning" /></label></td>
+          <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Tuesday" data-slot="Morning" /></label></td>
+          <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Wednesday" data-slot="Morning" /></label></td>
+          <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Thursday" data-slot="Morning" /></label></td>
+          <td><label><span class="shift-hours">7–15</span><input type="checkbox" data-day="Friday" data-slot="Morning" /></label></td>
+          <td><label><span class="shift-hours">10–20</span><input type="checkbox" data-day="Saturday" data-slot="Morning" /></label></td>
+        </tr>
+
+        <!-- Evening -->
+        <tr>
+          <th>Evening</th>
+          <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Sunday" data-slot="Evening" /></label></td>
+          <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Monday" data-slot="Evening" /></label></td>
+          <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Tuesday" data-slot="Evening" /></label></td>
+          <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Wednesday" data-slot="Evening" /></label></td>
+          <td><label><span class="shift-hours">15–23</span><input type="checkbox" data-day="Thursday" data-slot="Evening" /></label></td>
+          <td><label><span class="shift-hours">15–00</span><input type="checkbox" data-day="Friday" data-slot="Evening" /></label></td>
+          <td><!-- Saturday Evening excluded --></td>
+        </tr>
+
+        <!-- Night -->
+        <tr>
+          <th>Night</th>
+          <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Sunday" data-slot="Night" /></label></td>
+          <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Monday" data-slot="Night" /></label></td>
+          <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Tuesday" data-slot="Night" /></label></td>
+          <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Wednesday" data-slot="Night" /></label></td>
+          <td><label><span class="shift-hours">23–7</span><input type="checkbox" data-day="Thursday" data-slot="Night" /></label></td>
+          <td><label><span class="shift-hours">00–10</span><input type="checkbox" data-day="Friday" data-slot="Night" /></label></td>
+          <td><label><span class="shift-hours">20–07</span><input type="checkbox" data-day="Saturday" data-slot="Night" /></label></td>
+        </tr>
+      </table>
     </div>
   </div>
 
@@ -162,75 +270,87 @@
     // ---------------------------
     // Helpers
     // ---------------------------
-    const apiBase = "https://shift-organizer.onrender.com";
     const $ = (sel) => document.querySelector(sel);
+    const $$ = (sel) => document.querySelectorAll(sel);
     const api = {
       save: (formData) => fetch("/api/availability", { method: "POST", body: formData }),
       list: (userId) => fetch(`/api/availability/${encodeURIComponent(userId)}`),
       del: (id) => fetch(`/api/availability/${id}`, { method: "DELETE" }),
     };
 
-    function setMsg(text, ok = true) {
-      const el = $("#confirmation");
+    // Store current user ID from name input
+    let currentUserId = "";
+
+    // ---------------------------
+    // View Management
+    // ---------------------------
+    function showView(viewId) {
+      $$(".view").forEach(view => view.classList.remove("active"));
+      $(`#${viewId}`).classList.add("active");
+    }
+
+    // ---------------------------
+    // Landing Page Navigation
+    // ---------------------------
+    $("#btn-check-schedule").addEventListener("click", () => {
+      const userId = prompt("Please enter your User ID:");
+      if (!userId || !userId.trim()) {
+        return;
+      }
+      currentUserId = userId.trim().toLowerCase().replace(/\s+/g, "");
+      showView("schedule-view");
+      loadSchedule();
+    });
+
+    $("#btn-update-availability").addEventListener("click", () => {
+      showView("availability-view");
+    });
+
+    // ---------------------------
+    // Back Buttons
+    // ---------------------------
+    $("#btn-back-schedule").addEventListener("click", () => {
+      showView("landing-view");
+    });
+
+    $("#btn-back-availability").addEventListener("click", () => {
+      showView("landing-view");
+    });
+
+    // ---------------------------
+    // Message Display
+    // ---------------------------
+    function setMsg(text, ok = true, targetId = "confirmation") {
+      const el = $(`#${targetId}`);
       el.textContent = text || "";
       el.className = "msg " + (ok ? "ok" : "err");
     }
 
     function clearGridSelections() {
-      document.querySelectorAll("#availability-table input[type='checkbox']").forEach(cb => cb.checked = false);
+      $$("#availability-table input[type='checkbox']").forEach(cb => cb.checked = false);
     }
 
     // ---------------------------
-    // Save Availability
+    // Load Schedule
     // ---------------------------
-    $("#btn_save").addEventListener("click", async () => {
-      const userId = $("#user_id").value.trim();
-      if (!userId) { setMsg("Please enter a User ID.", false); return; }
-
-      const selected = [...document.querySelectorAll("#availability-table input[type='checkbox']:checked")]
-        .map(cb => ({ day: cb.dataset.day, time_slot: cb.dataset.slot }));
-
-      if (selected.length === 0) { setMsg("Please select at least one slot.", false); return; }
+    async function loadSchedule() {
+      const container = $("#schedule-list");
+      container.innerHTML = '<div class="empty">Loading your schedule...</div>';
 
       try {
-        for (const slot of selected) {
-          const fd = new FormData();
-          fd.append("user_id", userId);
-          fd.append("day", slot.day);
-          fd.append("time_slot", slot.time_slot);
-          const res = await api.save(fd);
-          if (!res.ok) throw new Error("Save failed");
-        }
-        setMsg("Availability saved!", true);
-        clearGridSelections();
-      } catch (e) {
-        setMsg(e.message || "Failed to save availability", false);
-      }
-    });
-
-    // ---------------------------
-    // Show Availability
-    // ---------------------------
-    $("#btn_show").addEventListener("click", async () => {
-      const userId = $("#user_id").value.trim();
-      if (!userId) { setMsg("Please enter a User ID.", false); return; }
-
-      try {
-        const res = await api.list(userId);
+        const res = await api.list(currentUserId);
         if (!res.ok) throw new Error("Fetch failed");
         const data = await res.json();
-        renderList(data);
-        setMsg(""); // clear
+        renderScheduleList(data);
+        setMsg("", true, "schedule-msg");
       } catch (e) {
-        setMsg(e.message || "Failed to load availability", false);
+        container.innerHTML = '<div class="empty">Failed to load schedule. Please try again.</div>';
+        setMsg(e.message || "Failed to load schedule", false, "schedule-msg");
       }
-    });
+    }
 
-    // ---------------------------
-    // Render list with Delete buttons
-    // ---------------------------
-    function renderList(items) {
-      const container = $("#list");
+    function renderScheduleList(items) {
+      const container = $("#schedule-list");
       container.innerHTML = "";
 
       if (!items || items.length === 0) {
@@ -255,17 +375,45 @@
           try {
             const res = await api.del(id);
             if (!res.ok) throw new Error("Delete failed");
-            // Remove row and optionally reload list
             btn.closest(".list-item").remove();
             if (container.children.length === 0) {
               container.innerHTML = '<div class="empty">No availability saved.</div>';
             }
+            setMsg("Shift deleted successfully", true, "schedule-msg");
           } catch (e) {
-            setMsg(e.message || "Failed to delete shift", false);
+            setMsg(e.message || "Failed to delete shift", false, "schedule-msg");
           }
         });
       });
     }
+
+    // ---------------------------
+    // Save Availability
+    // ---------------------------
+    $("#btn_save").addEventListener("click", async () => {
+      const userId = $("#user_id").value.trim();
+      if (!userId) { setMsg("Please enter a User ID.", false); return; }
+
+      const selected = [...$$("#availability-table input[type='checkbox']:checked")]
+        .map(cb => ({ day: cb.dataset.day, time_slot: cb.dataset.slot }));
+
+      if (selected.length === 0) { setMsg("Please select at least one slot.", false); return; }
+
+      try {
+        for (const slot of selected) {
+          const fd = new FormData();
+          fd.append("user_id", userId);
+          fd.append("day", slot.day);
+          fd.append("time_slot", slot.time_slot);
+          const res = await api.save(fd);
+          if (!res.ok) throw new Error("Save failed");
+        }
+        setMsg("Availability saved!", true);
+        clearGridSelections();
+      } catch (e) {
+        setMsg(e.message || "Failed to save availability", false);
+      }
+    });
   </script>
 </body>
 </html>

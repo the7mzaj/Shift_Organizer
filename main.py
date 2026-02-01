@@ -25,9 +25,6 @@ class Availability(Base):
 
 Base.metadata.create_all(bind=engine)
 
-# -----------------------------
-# FastAPI app
-# -----------------------------
 app = FastAPI()
 
 # Serve the frontend from /static
@@ -47,9 +44,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# -----------------------------
-# Dependency to get DB session
-# -----------------------------
 def get_db():
     db = SessionLocal()
     try:
@@ -57,9 +51,6 @@ def get_db():
     finally:
         db.close()
 
-# -----------------------------
-# API (prefix all endpoints with /api/*)
-# -----------------------------
 
 # Create availability entry
 @app.post("/api/availability")
@@ -86,7 +77,7 @@ def get_user_availability(user_id: str, db: Session = Depends(get_db)):
     )
     return [{"id": e.id, "user_id": e.user_id, "day": e.day, "time_slot": e.time_slot} for e in entries]
 
-# Delete a specific availability entry by its ID
+
 @app.delete("/api/availability/{entry_id}")
 def delete_availability(entry_id: int, db: Session = Depends(get_db)):
     entry = db.query(Availability).filter(Availability.id == entry_id).first()
