@@ -4,6 +4,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from sqlalchemy import DateTime
+from datetime import datetime, timezone
+from pydantic import BaseModel, Field
 
 # DB setup
 DATABASE_URL = "sqlite:///./availability.db"
@@ -18,6 +21,15 @@ class Availability(Base):
     user_id = Column(String, index=True)
     day = Column(String)
     time_slot = Column(String)
+
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True, nullable=False) #nullable prevents null values in the table.
+    email = Column(String, unique=True, index=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    created_ts = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_ts = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -96,3 +108,27 @@ def delete_availability(entry_id: int, db: Session = Depends(get_db)):
     db.delete(entry)
     db.commit()
     return {"ok": True, "deleted_id": entry_id}
+
+@app.post("/api/user/create")
+def create_user(
+    username: str = Form(...),
+    email: str = Form(...),
+    password_hash: str = Form(...),
+    db: Session = Depends(get_db)
+):
+    user = User(username=username, email=email, password_hash=password_hash)
+    existing_user = db.query(User).filter(User.username == user.username).first()
+    if existing_user:
+        raise HTTPException(status_code=405, detail="username already exists")
+
+    existing_email = db.query(User).filter(User.email == user.email).first()
+    if existing_email:
+        raise HTTPException(status_code=406, detail="email already exists")
+
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return {"id":user.id, "username":user.username, "email":user.email}
+
+
+#feature to add: bulk delete by user
