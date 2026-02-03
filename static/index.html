@@ -242,11 +242,11 @@
         if (!response.ok) {
           throw new Error("Failed to load");
         }
-
+        
         const data = await response.json();
-        showMessage("shift-message", "", true);
+        showMessage("shift-message", "on-call contact retreieved successfully", true); //true is green, false is red
       } catch (error) {
-        showMessage("shift-message", "Error loading shift owner info", false);
+        showMessage("shift-message", "Shift is unoccupied", false);
         document.getElementById("who-is-on-shift-list").innerHTML = "";
       }
     }

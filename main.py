@@ -75,17 +75,17 @@ def get_user_availability(user_id: str, db: Session = Depends(get_db)):
     )
     return [{"id": e.id, "user_id": e.user_id, "day": e.day, "time_slot": e.time_slot} for e in entries]
 
-@app.get("api/availability/{day}/{shift}")
+@app.get("/api/availability/{day}/{shift}")
 def get_who_on_shift(day: str, shift: str, db: Session = Depends(get_db)):
-    entry = (
+    entries = (
          db.query(Availability)
          .filter(Availability.day == day)
          .filter(Availability.time_slot == shift)
-         .first()
+         .all()
     )
-    if not entry:
+    if not entries:
         raise HTTPException(status_code=404, detail="Shift is unoccupied")
-    return {"on-call":entry.user_id}
+    return [{"on-call":entry.user_id} for entry in entries]
 
 # API: Delete a certain shift for a user... {entry_id} is the id of the shift to delete from the database.
 @app.delete("/api/availability/{entry_id}")
