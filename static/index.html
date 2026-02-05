@@ -244,7 +244,20 @@
         }
         
         const data = await response.json();
-        showMessage("shift-message", "on-call contact retreieved successfully", true); //true is green, false is red
+        
+        // data is like: [ { "on-call": "Hamza" }, { "on-call": "SomeoneElse" } ]
+        if (!Array.isArray(data) || data.length === 0) {
+          showMessage("shift-message", "Shift is unoccupied", false);
+          document.getElementById("who-is-on-shift-list").innerHTML = "";
+          return;
+        }
+
+        const names = data.map(item => item["on-call"]).join(", ");
+        showMessage(
+          "shift-message",
+          `On-call contact(s): ${names}`,
+          true
+        );
       } catch (error) {
         showMessage("shift-message", "Shift is unoccupied", false);
         document.getElementById("who-is-on-shift-list").innerHTML = "";
