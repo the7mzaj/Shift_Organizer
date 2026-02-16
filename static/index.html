@@ -247,7 +247,7 @@
         
         // data is like: [ { "on-call": "Hamza" }, { "on-call": "SomeoneElse" } ]
         if (!Array.isArray(data) || data.length === 0) {
-          showMessage("shift-message", "Shift is unoccupied", false);
+          showMessage("shift-message", "Shift is unoccupied ", false);
           document.getElementById("who-is-on-shift-list").innerHTML = "";
           return;
         }

@@ -43,7 +43,7 @@ app.mount("/static", StaticFiles(directory="static", html=True), name="static")
 # Redirect root to frontend
 @app.get("/")
 def root_redirect():
-    return RedirectResponse(url="/static/index.html", status_code=302)
+    return RedirectResponse(url="/static/login.html", status_code=302)
 
 # Allow CORS (for development)
 app.add_middleware(
