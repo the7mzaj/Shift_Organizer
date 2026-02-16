@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wardiya - Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .section {
+      margin: 30px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    input[type="text"],
+    input[type="password"] {
+      padding: 8px;
+      margin: 5px;
+      width: 200px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #555;
+    }
+    .message {
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+    }
+    .success {
+      background: #d4edda;
+      color: #155724;
+    }
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wardiya</h1>
+
+  <div class="section">
+    <h2>Login</h2>
+    <form id="login-form">
+      <div>
+        <label>Username: </label>
+        <input type="text" id="username" placeholder="Enter your username" />
+      </div>
+      <div>
+        <label>Password: </label>
+        <input type="password" id="password" placeholder="Enter your password" />
+      </div>
+      <button type="submit">Login</button>
+    </form>
+    <div id="login-message"></div>
+  </div>
+</body>
+</html>
